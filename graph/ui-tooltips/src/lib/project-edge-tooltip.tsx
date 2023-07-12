@@ -6,6 +6,7 @@ export interface ProjectEdgeNodeTooltipProps {
   target: string;
   fileDependencies: Array<{ fileName: string }>;
   description?: string;
+  fileClickCallback: (fileName: string) => void;
 }
 
 export function ProjectEdgeNodeTooltip({
@@ -14,6 +15,7 @@ export function ProjectEdgeNodeTooltip({
   target,
   fileDependencies,
   description,
+  fileClickCallback,
 }: ProjectEdgeNodeTooltipProps) {
   return (
     <div className="text-sm text-slate-700 dark:text-slate-400">
@@ -34,6 +36,7 @@ export function ProjectEdgeNodeTooltip({
               <li
                 key={fileDep.fileName}
                 className="whitespace-nowrap px-4 py-2 text-sm font-medium text-slate-800 dark:text-slate-300"
+                onClick={() => fileClickCallback(fileDep.fileName)}
               >
                 <span className="block truncate font-normal">
                   {fileDep.fileName}

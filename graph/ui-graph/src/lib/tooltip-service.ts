@@ -33,12 +33,18 @@ export class GraphTooltipService {
           });
           break;
         case 'EdgeClick':
+          const callback = (url) =>
+            graph.broadcast({
+              type: 'FileLinkClick',
+              sourceRoot: event.data.sourceRoot,
+              file: url,
+            });
           this.openEdgeToolTip(event.ref, {
             type: event.data.type,
             target: event.data.target,
             source: event.data.source,
-            sourceRoot: event.data.sourceRoot,
             fileDependencies: event.data.fileDependencies,
+            fileClickCallback: callback,
           });
           break;
       }
