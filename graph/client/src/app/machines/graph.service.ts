@@ -5,12 +5,17 @@ let graphService: GraphService;
 
 export function getGraphService(): GraphService {
   if (!graphService) {
-    const darkModeEnabled = selectValueByThemeStatic(true, false);
     graphService = new GraphService(
       'cytoscape-graph',
-      selectValueByThemeStatic('dark', 'light')
+      selectValueByThemeStatic('dark', 'light'),
+      isRenderedWithinIde() ? 'nx-console' : undefined
     );
   }
 
   return graphService;
+}
+
+function isRenderedWithinIde(): boolean {
+  const href = window.location.href;
+  return href.includes('vscode-webview') || href.includes('jbcefbrowser');
 }

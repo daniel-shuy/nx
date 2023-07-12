@@ -22,8 +22,19 @@ export class ExternalApi {
     },
   };
 
+  private fileClickCallbackListeners: ((url: string) => void)[] = [];
+
   get depGraphService() {
     return this.projectGraphService;
+  }
+
+  constructor() {
+    this.graphService.listen((event) => {
+      if (event.type === 'FileLinkClick') {
+        const url = `${event.sourceRoot}/${event.file}`;
+        this.fileClickCallbackListeners.forEach((cb) => cb(url));
+      }
+    });
   }
 
   focusProject(projectName: string) {
@@ -45,12 +56,7 @@ export class ExternalApi {
   }
 
   registerFileClickCallback(callback: (url: string) => void) {
-    this.graphService.listen((event) => {
-      if (event.type === 'FileLinkClick') {
-        const url = `${event.sourceRoot}/${event.file}`;
-        callback(url);
-      }
-    });
+    this.fileClickCallbackListeners.push(callback);
   }
 
   private handleLegacyProjectGraphEvent(event: ProjectGraphMachineEvents) {
